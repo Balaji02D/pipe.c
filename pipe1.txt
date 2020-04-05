@@ -1,0 +1,79 @@
+CODE:
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<errno.h>
+#include<fcntl.h>
+int main(int argc, char*argv[])
+//fd[0] will be used for reading
+//fd[1] will be used for writing
+int fd[2];
+int size;
+pid_t pid;
+char text[1024];
+char copy[1024];
+//creating two pointers
+Char*sourceFile=argv[1];
+Char*destFile=argv[2];
+//creating  a pipe
+Pipe(fd);
+if(pipe(fd)==-1)
+{
+printf(stderr,”/n pipe failed”);
+return 1;
+}
+//forking the process
+pid=fork()
+if(pid<0)
+{
+printf(“stderr,”\n fork failed”);
+return 1;
+}
+if(pid<0)
+{
+int sourceFileNum;
+ssize_t numBytes;
+//closing the reading end of the pipe
+Close(fd[0]);
+sourceFileNum=open(SourceFile,O_RDONLY);
+numBytes=read(sourceFileNum,text,sizeof(text));
+write(fd[1],text,numBytes);
+//closing the writing end of the pipe
+close(fd[1]);
+}
+elseif(pid==0)
+{
+int destDesc;
+close(fd[1]);
+ssize_t numBytesCh;
+numBytesCh=read(fd[0],copy,sizeof(copy));
+//close the reading end of the pipe
+close(fd[0]);
+//open the destination file and writing the content from the pipe to the file
+destDesc=open(destFile,O_CREAT|O_WRONLY):
+write(destDesc,copy,numBytesCh);
+}
+return 0;
+}
+
+PROGRAM DESCRIPTION:
+Generally, pipes in OS is a technique for passing information from one process to another. In this program filecopy takes the two parameters passed at the run time to the program and the there are two process running simultaneously and we have to copy the information from one file to other using pipes. So, in this we use the pipe that collects the information from the source file. Later the child process reads from the pipe. Pipe() is a system call. Here a pipe passes the standard output from one process to the other process. 
+Ordinary pipes usually work in the producer consumer fashion. Pipes are important in Inter_process communication. Generally, pipes are unidirectional. The process writes the content at one end of the pipe and the other process reads the content at the other end of the file. Pipe is a unidirectional. It supports only for one direction flow of the information and the child process cannot use the same pipe to pass a message to the parent. It needs to use the other pipe to communicate with the parent. The pipe can be used by the creating process, as well as all its child processes, for reading and writing. One process can write to this “virtual file” or pipe and another related process can read from it. this program will be passed two parameters. Names of source file and destination file respectively.
+
+ALGORITHM USED FOR CODE IMPLEMENTATION:
+Step 1 − Create a pipe.
+Step 2 − Create a child process.
+Step 3 − Parent process writes data to the pipe from the source file.
+Step 4 − Child process retrieves the message from the pipe and writes it to the destination file.
+Step 5 _Repeat the steps 3 and 4 once again.
+
+COMPLEXITY OF THE ALGORITHM							COMPLEXITY
+Step 1 − Create a pipe.										1
+Step 2 − Create a child process.									1
+Step 3 − Parent process writes to the pipe.								1
+Step 4 − Child process retrieves the message from the pipe and writes it to the standard output.    1
+Step 5 − Repeat step 3 and step 4 once again.							n/2
+
+OVERALL COMPLLEXITY OF THE ALGORITHM:
+The complexity of the algorithm changes when we consider the whole code at once. =O(n/2)
