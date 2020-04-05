@@ -1,0 +1,40 @@
+
+code snippets
+
+Here we need to pass two parameters to the file. So that the program creates a pipe and this pipe checks whether the source file and target both are in open state and if they are in then the source file writes the information in to the pipe and the child process copies the information from the pipe to the destination file.
+Two parameters are passed to the program and the three parameters are passed to the read and write system calls respectively.
+The code snippet is:
+if(pipe(fd)==-1)
+{
+printf(stderr,”/n pipe failed”);
+return 1;
+}
+pid=fork()
+if(pid<0)
+{
+printf(“stderr,”\n fork failed”);
+return 1;
+}
+if(pid<0)
+{
+int sourceFileNum;
+ssize_t numBytes;
+Close(fd[0]);
+sourceFileNum=open(SourceFile,O_RDONLY);
+numBytes=read(sourceFileNum,text,sizeof(text));
+write(fd[1],text,numBytes);
+close(fd[1]);
+}
+elseif(pid==0)
+{
+int destDesc;
+close(fd[1]);
+ssize_t numBytesCh;
+numBytesCh=read(fd[0],copy,sizeof(copy));
+close(fd[0]);
+The need for implementing the additional algorithm is to check whether the pipes are helpful in collecting the information from the information file and allowing the child to read the information from the file and writing it to the target file.
+BOUNDARY CONDITIONS:
+This is necessary to pass two parameters to the program and two parameters are the name of the file to be copied and the name of the  copied file. From these two parameters we create a pipe that reads the data from and child process reads from it. And the information from one file to the other file can be shared only by using the pipes.
+TEST CASES:
+if (pid==0) then child process will be created and that copy’s the information from the pipe to the destination file.
+if(pid<0) for the pipe then pipe will be created. pipe will be created by using the pipe() system call. name of the pipe can be given in the parenthesis.
